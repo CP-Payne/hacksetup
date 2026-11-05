@@ -93,9 +93,20 @@ bash setup.sh mobile_tools network_tools
 | `web_tools` | Burp Community, ffuf, feroxbuster, gobuster, sqlmap, nuclei, wordlists |
 | `network_tools` | nmap, netexec, impacket, responder, evil-winrm, hashcat, john, chisel and others |
 | `mobile_tools` | adb, apktool, jadx, frida-tools, objection |
+| `vscode` | VS Code from Microsoft's apt repo, so it updates with the system |
+| `android_studio` | Android Studio in `~/tools/android-studio`, on your PATH as `android-studio` and in the Super+D launcher |
 | `burp_pro` | Burp Suite Pro installer. Optional, so a full run skips it |
 
 To install Burp Pro, run `bash setup.sh burp_pro`. To skip a section on a machine, comment it out in `main()` at the bottom of `setup.sh`.
+
+### Android Studio notes
+
+* It's a 1.6 GB download, needs 8 GB of free disk, and only runs on x86-64. Skip the `android_studio` section on an ARM machine.
+* The script installs a pinned version and checks it against Google's SHA-256. After that it updates itself, and re-running the section skips it.
+* A fresh install still needs the Android SDK. Android Studio's setup wizard downloads it on first launch.
+* The emulator needs hardware virtualization. Inside a Kali VM, that means enabling nested virtualization on the host. A physical device over `adb` doesn't need it.
+
+If the download fails because the pinned version has gone, copy the new Linux link and SHA-256 from <https://developer.android.com/studio> into `url` and `sha` in `android_studio()`.
 
 ## Commands
 

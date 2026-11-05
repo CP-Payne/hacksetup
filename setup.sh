@@ -141,6 +141,71 @@ mobile_tools() {
   pipx_install frida-tools objection
 }
 
+vscode() {
+  # Microsoft's apt repo, so VS Code updates with the rest of the system.
+  log "VS Code"
+  apt_install curl gpg
+  if ! curl -fsSL https://packages.microsoft.com/keys/microsoft.asc \
+      | sudo gpg --dearmor --yes -o /usr/share/keyrings/microsoft.gpg; then
+    FAILED+=("vscode: signing key")
+    return 0
+  fi
+  sudo tee /etc/apt/sources.list.d/vscode.sources >/dev/null <<'EOF'
+Types: deb
+URIs: https://packages.microsoft.com/repos/code
+Suites: stable
+Components: main
+Architectures: amd64,arm64,armhf
+Signed-By: /usr/share/keyrings/microsoft.gpg
+EOF
+  sudo apt-get update || FAILED+=("vscode: apt update")
+  apt_install code
+}
+
+android_studio() {
+  # Not in apt, so this is Google's tarball (1.6 GB, x86-64 only). It lives in
+  # ~/tools, owned by you, so Android Studio's own updater works after install.
+  # To pin a newer build, copy both values from developer.android.com/studio.
+  log "Android Studio"
+  local url='https://edgedl.me.gvt1.com/android/studio/ide-zips/2026.2.2.8/android-studio-rabbit2-linux.tar.gz'
+  local sha='b47fdcc0703019618a7afd5ad1822cafc5de66bed984640be2977a0fdb538304'
+  local dir="$TOOLS/android-studio"
+  local archive="$TOOLS/android-studio.tar.gz" unpack="$TOOLS/.android-studio.tmp"
+
+  if [[ -x "$dir/bin/studio" ]]; then
+    echo "Already installed, skipping (it updates itself)"
+  else
+    # Downloaded to ~/tools because /tmp can be too small for it
+    mkdir -p "$TOOLS"
+    rm -rf "$unpack"
+    mkdir "$unpack"
+    if curl -fL -o "$archive" "$url" \
+        && echo "$sha  $archive" | sha256sum -c - \
+        && tar -xzf "$archive" -C "$unpack"; then
+      rm -rf "$dir"
+      mv "$unpack/android-studio" "$dir"
+    else
+      FAILED+=("android studio: download, checksum or unpack")
+    fi
+    rm -rf "$archive" "$unpack"
+    [[ -x "$dir/bin/studio" ]] || return 0
+  fi
+
+  # Puts it on PATH and in the Super+D launcher
+  link "$dir/bin/studio" "$HOME/.local/bin/android-studio"
+  mkdir -p "$HOME/.local/share/applications"
+  cat > "$HOME/.local/share/applications/android-studio.desktop" <<EOF
+[Desktop Entry]
+Type=Application
+Name=Android Studio
+Exec="$dir/bin/studio" %f
+Icon=$dir/bin/studio.svg
+Categories=Development;IDE;
+Terminal=false
+StartupWMClass=jetbrains-studio
+EOF
+}
+
 burp_pro() {
   # Optional: Burp Suite Pro via PortSwigger's Linux installer (unattended).
   # Installs to ~/BurpSuitePro. Licence is entered on first launch.
@@ -170,6 +235,8 @@ main() {
   web_tools
   network_tools
   mobile_tools
+  vscode
+  android_studio
   # burp_pro
   summary
 }
