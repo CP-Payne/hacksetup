@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+# eng <name> — create or reattach a tmux session for an engagement/box.
+# Each one gets ~/engagements/<name> and the same named windows,
+# so you always know Alt+1 = recon, Alt+2 = web, etc.
+set -euo pipefail
+name="${1:?usage: eng <name>   (existing sessions: tmux ls)}"
+dir="$HOME/engagements/$name"
+mkdir -p "$dir"/{scans,loot,exploits,screenshots}
+
+if ! tmux has-session -t "=$name" 2>/dev/null; then
+  tmux new-session -d -s "$name" -c "$dir" -n recon
+  tmux new-window  -t "$name:" -c "$dir" -n web
+  tmux new-window  -t "$name:" -c "$dir" -n exploit
+  tmux new-window  -t "$name:" -c "$dir" -n shells
+  tmux select-window -t "$name:1"
+fi
+
+if [[ -n "${TMUX:-}" ]]; then
+  tmux switch-client -t "=$name"
+else
+  tmux attach -t "=$name"
+fi

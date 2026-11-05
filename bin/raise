@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+# raise <class-regex> <command...> — focus the window if it exists, else launch it.
+cls="$1"; shift
+if i3-msg -t get_tree | jq -e --arg c "$cls" \
+     '[.. | objects | select((.window_properties.class? // "") | test($c; "i"))] | length > 0' >/dev/null; then
+  i3-msg -q "[class=\"(?i)$cls\"] focus"
+else
+  setsid -f "$@" >/dev/null 2>&1
+fi

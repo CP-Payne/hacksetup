@@ -1,0 +1,104 @@
+# i3 config — Super (Windows key) is the modifier
+set $mod Mod4
+font pango:JetBrains Mono 10
+floating_modifier $mod
+default_border pixel 2
+hide_edge_borders smart
+focus_follows_mouse no
+
+# ---- autostart -------------------------------------------------------------
+exec --no-startup-id picom -b
+exec --no-startup-id dunst
+exec --no-startup-id nm-applet
+
+# ---- launching -------------------------------------------------------------
+bindsym $mod+Return exec kitty
+bindsym $mod+d   exec --no-startup-id rofi -show drun      # app launcher
+bindsym $mod+Tab exec --no-startup-id rofi -show window    # fuzzy-find any open window
+bindsym $mod+q kill
+bindsym Print exec --no-startup-id flameshot gui           # screenshot for reports
+
+# Jump to the app if it's open, launch it if it isn't
+bindsym $mod+w exec --no-startup-id raise firefox firefox-esr
+bindsym $mod+b exec --no-startup-id raise burp burpsuite
+bindsym $mod+t exec --no-startup-id raise kitty kitty
+
+# ---- focus / move (vim keys + arrows) --------------------------------------
+bindsym $mod+h focus left
+bindsym $mod+j focus down
+bindsym $mod+k focus up
+bindsym $mod+l focus right
+bindsym $mod+Left focus left
+bindsym $mod+Down focus down
+bindsym $mod+Up focus up
+bindsym $mod+Right focus right
+bindsym $mod+Shift+h move left
+bindsym $mod+Shift+j move down
+bindsym $mod+Shift+k move up
+bindsym $mod+Shift+l move right
+
+# ---- layout ----------------------------------------------------------------
+bindsym $mod+v split v
+bindsym $mod+s split h
+bindsym $mod+f fullscreen toggle
+bindsym $mod+e layout toggle split
+bindsym $mod+g layout tabbed
+bindsym $mod+Shift+space floating toggle
+bindsym $mod+space focus mode_toggle
+
+# ---- workspaces ------------------------------------------------------------
+set $ws1 "1:term"
+set $ws2 "2:web"
+set $ws3 "3:burp"
+set $ws4 "4:notes"
+set $ws5 "5"
+set $ws6 "6"
+set $ws7 "7"
+set $ws8 "8"
+set $ws9 "9"
+
+bindsym $mod+1 workspace $ws1
+bindsym $mod+2 workspace $ws2
+bindsym $mod+3 workspace $ws3
+bindsym $mod+4 workspace $ws4
+bindsym $mod+5 workspace $ws5
+bindsym $mod+6 workspace $ws6
+bindsym $mod+7 workspace $ws7
+bindsym $mod+8 workspace $ws8
+bindsym $mod+9 workspace $ws9
+bindsym $mod+Shift+1 move container to workspace $ws1
+bindsym $mod+Shift+2 move container to workspace $ws2
+bindsym $mod+Shift+3 move container to workspace $ws3
+bindsym $mod+Shift+4 move container to workspace $ws4
+bindsym $mod+Shift+5 move container to workspace $ws5
+bindsym $mod+Shift+6 move container to workspace $ws6
+bindsym $mod+Shift+7 move container to workspace $ws7
+bindsym $mod+Shift+8 move container to workspace $ws8
+bindsym $mod+Shift+9 move container to workspace $ws9
+bindsym $mod+grave workspace back_and_forth                # flip to last workspace
+
+# Apps always open on their own workspace
+assign [class="(?i)firefox"] $ws2
+assign [class="(?i)burp"]    $ws3
+assign [class="(?i)obsidian"] $ws4
+for_window [class="(?i)burp" window_type="dialog"] floating enable
+for_window [window_role="pop-up"] floating enable
+
+# ---- resize / session ------------------------------------------------------
+mode "resize" {
+  bindsym h resize shrink width 5 px or 5 ppt
+  bindsym j resize grow height 5 px or 5 ppt
+  bindsym k resize shrink height 5 px or 5 ppt
+  bindsym l resize grow width 5 px or 5 ppt
+  bindsym Escape mode "default"
+  bindsym Return mode "default"
+}
+bindsym $mod+r mode "resize"
+bindsym $mod+Shift+c reload
+bindsym $mod+Shift+r restart
+bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'Exit i3?' -B 'Yes' 'i3-msg exit'"
+
+bar {
+  status_command i3status
+  position top
+}
