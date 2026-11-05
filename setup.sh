@@ -111,6 +111,9 @@ dotfiles() {
     chmod +x "$f"
     link "$f" "$HOME/.local/bin/$(basename "$f")"
   done
+  # tmux reads its config once, at server start. A server that was already
+  # running would otherwise keep the old prefix (Ctrl+B) until it was killed.
+  tmux source-file "$HOME/.tmux.conf" 2>/dev/null || true
 }
 
 web_tools() {
