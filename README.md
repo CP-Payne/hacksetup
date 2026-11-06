@@ -46,6 +46,32 @@ That opens a session with four named windows: recon, web, exploit and shells. Fr
 
 Press Ctrl+A, let go, then press the second key. The letters are lowercase: capital `C`, for example, opens a different tmux screen.
 
+### Vim keys
+
+The command line and terminal output both use vim keys, as two separate modes.
+
+**Editing a command** works in any zsh prompt, inside tmux or not. The cursor is a bar in insert mode and a block in normal mode.
+
+* Esc enters normal mode. Enter runs the command from either mode.
+* `h`/`l` move left and right, `w`/`b`/`e` jump by word, and `W`/`B`/`E` jump by space-separated word.
+* `0` and `$` go to the start and end of the line, and `f<` jumps to the next `<`.
+* `i` inserts at the cursor, `a` after it, `I` at the start of the line and `A` at the end.
+* `x` deletes a character, `dw` a word, and `D` the rest of the line. `u` undoes.
+* `cw` changes a word, and `ciw` changes the whole word under the cursor.
+* `ci"`, `ci'`, `ci(`, `ci[`, `ci{` and `ci<` change the text inside that pair.
+
+To fill in a pasted placeholder such as `nmap -p- <TARGET>`, press Esc, `0`, `f<`, then `ca<`, type the value and press Enter. Use `ci<` instead to keep the brackets.
+
+The `/` and `?` keys in normal mode search your command history. To reach the start of a line while still in insert mode, press Ctrl+A twice inside tmux, or once outside it.
+
+**Searching output** works inside tmux.
+
+* Ctrl+A, then Esc enters normal mode in the output, and `i` or `q` leaves it. Ctrl+A, then `[` also enters it.
+* Ctrl+A, then `/` jumps straight to searching upward through the output.
+* In normal mode, `/` searches down, `?` searches up, and `n`/`N` go to the next and previous match.
+* `Ctrl+U`/`Ctrl+D` move half a page, `Ctrl+B`/`Ctrl+F` a full page, and `g`/`G` go to the top and bottom. `h`/`j`/`k`/`l`, `w`/`b` and `0`/`$` work as usual.
+* `v` starts a selection, Ctrl+V switches it to a rectangle, and `y` copies it to the clipboard and leaves normal mode.
+
 A good first run is `eng htb-box`, then Super+W for Firefox, Super+B for Burp, and Super+` to flip back to the terminal. After a day of that the keys become automatic.
 
 ## Installing
@@ -142,7 +168,8 @@ All of these come after Ctrl+A.
 | Key | Action |
 | --- | --- |
 | `w` | List windows |
-| `[` | Scroll and copy with vim keys, `q` to leave |
+| Esc or `[` | Scroll, search and copy with vim keys, `i` or `q` to leave |
+| `/` | Search upward through the output |
 | `P` | Turn logging of the current pane to `~/tmux-logs` on or off |
 | `r` | Reload the tmux config |
 | Ctrl+A | Send a real Ctrl+A to the program in the pane |
@@ -198,6 +225,7 @@ The files in `dotfiles/` are live, so edit them in the repo and reload:
 | `dotfiles/tmux.conf` | Ctrl+A, then `r` |
 | `dotfiles/i3/config` | Super+Shift+C |
 | `dotfiles/kitty.conf` | Open a new terminal |
+| `dotfiles/vi-mode.zsh` | Open a new terminal |
 | `dotfiles/xprofile` | Log out and back in |
 
 To add a new config file, put it in `dotfiles/` and add a `link` line to the `dotfiles()` function in `setup.sh`:

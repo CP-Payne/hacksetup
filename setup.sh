@@ -107,6 +107,10 @@ dotfiles() {
   link "$REPO/dotfiles/i3/config"  "$HOME/.config/i3/config"
   link "$REPO/dotfiles/kitty.conf" "$HOME/.config/kitty/kitty.conf"
   link "$REPO/dotfiles/xprofile"   "$HOME/.xprofile"
+  link "$REPO/dotfiles/vi-mode.zsh" "$HOME/.config/zsh/vi-mode.zsh"
+  # Added last so it wins over the emacs keys in Kali's default .zshrc
+  local vi_line='[[ -r ~/.config/zsh/vi-mode.zsh ]] && source ~/.config/zsh/vi-mode.zsh'
+  grep -qxF "$vi_line" "$HOME/.zshrc" 2>/dev/null || echo "$vi_line" >> "$HOME/.zshrc"
   for f in "$REPO"/bin/*; do
     chmod +x "$f"
     link "$f" "$HOME/.local/bin/$(basename "$f")"
