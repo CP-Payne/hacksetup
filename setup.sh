@@ -77,7 +77,8 @@ base_system() {
 
 desktop() {
   log "Desktop: i3, rofi, kitty"
-  apt_install i3 i3status rofi picom dunst feh kitty \
+  # No compositor on purpose: picom can stop terminals redrawing in a VM.
+  apt_install i3 i3status rofi dunst feh kitty \
               xclip flameshot fonts-jetbrains-mono jq x11-xserver-utils
   # At the login screen, pick "i3" from the session menu.
 }

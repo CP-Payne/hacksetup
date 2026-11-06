@@ -113,7 +113,7 @@ bash setup.sh mobile_tools network_tools
 | Section | What it does |
 | --- | --- |
 | `base_system` | Updates the system, installs build tools, Python, Go and Java, and creates `~/tools`, `~/.local/bin` and `~/engagements` |
-| `desktop` | i3, rofi, kitty, a compositor, notifications and screenshots |
+| `desktop` | i3, rofi, kitty, notifications and screenshots |
 | `shell_tools` | tmux, fzf, ripgrep, fd, bat and others, plus PATH and the `t` alias in `~/.zshrc` |
 | `dotfiles` | Links the configs and `bin/` scripts into place, then reloads any running tmux |
 | `web_tools` | Burp Community, ffuf, feroxbuster, gobuster, sqlmap, nuclei, wordlists |
@@ -249,6 +249,8 @@ assign [class="(?i)obsidian"] $ws4
 1. Make sure you're in tmux, which has a bar at the top showing the session and windows. In a plain terminal, Ctrl+A just moves the cursor to the start of the line, so run `eng test` first.
 2. Check that `~/.tmux.conf` is a link into this repo with `ls -l ~/.tmux.conf`. If it isn't, run `bash setup.sh dotfiles`.
 3. Run `tmux show -g prefix`. If it prints `prefix C-b`, tmux started before the config was linked. Run `tmux source-file ~/.tmux.conf` to fix it.
+
+**The terminal opens but typing doesn't appear.** The text is usually going in, and the window just isn't redrawing, so it shows up when something resizes the window. Make sure picom isn't running with `pkill picom`, then open a new terminal. If it still happens in a VM, enable 3D acceleration for the VM or try a different graphics adapter.
 
 **`eng` or `raise` is not found.** Run `bash setup.sh dotfiles`, then log out and back in.
 

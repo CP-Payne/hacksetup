@@ -7,7 +7,6 @@ hide_edge_borders smart
 focus_follows_mouse no
 
 # ---- autostart -------------------------------------------------------------
-exec --no-startup-id picom -b
 exec --no-startup-id dunst
 exec --no-startup-id nm-applet
 
