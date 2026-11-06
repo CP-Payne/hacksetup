@@ -1,5 +1,7 @@
 # Sourced by the login manager before i3 starts
 export PATH="$HOME/.local/bin:$HOME/go/bin:$PATH"
-export TERMINAL=kitty
+export TERMINAL=xterm
 # Java apps (Burp) render grey/blank in tiling WMs without this
 export _JAVA_AWT_WM_NONREPARENTING=1
+# Terminal fonts, colours and keys
+[ -r "$HOME/.Xresources" ] && xrdb -merge "$HOME/.Xresources"

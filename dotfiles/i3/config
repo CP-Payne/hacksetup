@@ -7,11 +7,12 @@ hide_edge_borders smart
 focus_follows_mouse no
 
 # ---- autostart -------------------------------------------------------------
+exec --no-startup-id xset b off                  # no terminal bell
 exec --no-startup-id dunst
 exec --no-startup-id nm-applet
 
 # ---- launching -------------------------------------------------------------
-bindsym $mod+Return exec kitty
+bindsym $mod+Return exec xterm
 bindsym $mod+d   exec --no-startup-id rofi -show drun      # app launcher
 bindsym $mod+Tab exec --no-startup-id rofi -show window    # fuzzy-find any open window
 bindsym $mod+q kill
@@ -20,7 +21,7 @@ bindsym Print exec --no-startup-id flameshot gui           # screenshot for repo
 # Jump to the app if it's open, launch it if it isn't
 bindsym $mod+w exec --no-startup-id raise firefox firefox-esr
 bindsym $mod+b exec --no-startup-id raise burp burpsuite
-bindsym $mod+t exec --no-startup-id raise kitty kitty
+bindsym $mod+t exec --no-startup-id raise xterm xterm
 
 # ---- focus / move (vim keys + arrows) --------------------------------------
 bindsym $mod+h focus left

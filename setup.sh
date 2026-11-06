@@ -76,9 +76,10 @@ base_system() {
 }
 
 desktop() {
-  log "Desktop: i3, rofi, kitty"
-  # No compositor on purpose: picom can stop terminals redrawing in a VM.
-  apt_install i3 i3status rofi dunst feh kitty \
+  log "Desktop: i3, rofi, xterm"
+  # This runs in VirtualBox, so no compositor and no terminal that needs OpenGL.
+  # picom and kitty both stopped the screen updating there.
+  apt_install i3 i3status rofi dunst feh xterm \
               xclip flameshot fonts-jetbrains-mono jq x11-xserver-utils
   # At the login screen, pick "i3" from the session menu.
 }
@@ -106,7 +107,7 @@ dotfiles() {
   log "Linking dotfiles (edit them in $REPO, changes apply live)"
   link "$REPO/dotfiles/tmux.conf"  "$HOME/.tmux.conf"
   link "$REPO/dotfiles/i3/config"  "$HOME/.config/i3/config"
-  link "$REPO/dotfiles/kitty.conf" "$HOME/.config/kitty/kitty.conf"
+  link "$REPO/dotfiles/Xresources" "$HOME/.Xresources"
   link "$REPO/dotfiles/xprofile"   "$HOME/.xprofile"
   link "$REPO/dotfiles/vi-mode.zsh" "$HOME/.config/zsh/vi-mode.zsh"
   # Added last so it wins over the emacs keys in Kali's default .zshrc
